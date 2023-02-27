@@ -19,12 +19,12 @@ int RequestQueue::GetNoResultRequests() const {
 }
 
 void RequestQueue::AddRequest(const QueryResult& req) {
-    if (req.docAmount == 0) {
+    if (req.doc_amount == 0) {
         ++no_result_requests_;
     }
     requests_.push_back(req);
     if (requests_.size() > RequestQueue::min_in_day_) {
-        if (requests_.front().docAmount == 0) {
+        if (requests_.front().doc_amount == 0) {
             --no_result_requests_;
         }
         requests_.pop_front();
