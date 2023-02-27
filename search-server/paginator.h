@@ -21,15 +21,15 @@ struct IteratorRange {
 };
 
 template <typename Iterator>
-std::ostream& operator<<(std::ostream& o, const IteratorRange<Iterator>& range) {
+std::ostream& operator<<(std::ostream& os, const IteratorRange<Iterator>& range) {
 
     using namespace std::string_literals;
     
     for (auto it = range.begin(); it != range.end(); ++it) {
-        o << "{ document_id = "s << (*it).id << ", relevance = "s << (*it).relevance << ", rating = "s << (*it).rating << " }"s;
+        os << "{ document_id = "s << (*it).id << ", relevance = "s << (*it).relevance << ", rating = "s << (*it).rating << " }"s;
     }
 
-    return o;
+    return os;
 }
 
 template <typename Iterator>
