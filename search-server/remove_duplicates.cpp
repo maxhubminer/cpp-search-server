@@ -3,26 +3,29 @@
 // O(wN(logN+logW)), где w — максимальное количество слов в документе
 void RemoveDuplicates(SearchServer &search_server)
 {
-    std::map<std::set<std::string>, std::vector<int>> words_to_docs;
+    std::set<std::set<std::string>> words_to_docs;
     std::set<int> docs_to_del;
 
     for (int doc_id : search_server)
     {                                                                     // N
         const auto &word_freq = search_server.GetWordFrequencies(doc_id); // N*logN
         std::vector<std::string> just_words;
-        for (const auto &[word, freq] : word_freq)
-        {
-            just_words.push_back(word);
-        }
+        std::vector<int> temp_;
+        temp_.reserve(word_freq.size());
+        std::transform(word_freq.begin(), word_freq.end(), temp_.begin(), [&just_words](const auto &map_elem)
+                           {
+                                just_words.push_back(map_elem.first);
+                                return 0;
+                            });
         std::set set_key(just_words.begin(), just_words.end());
 
-        if (!words_to_docs[set_key].empty())
+        if (words_to_docs.count(set_key))
         {
             docs_to_del.insert(doc_id);
         }
         else
         {
-            words_to_docs[set_key].push_back(doc_id);
+            words_to_docs.insert(set_key);
         }
     }
 

@@ -23,7 +23,7 @@ void SearchServer::AddDocument(int document_id, const std::string& document, Doc
         }
 
         documents_.emplace(document_id, DocumentData{ComputeAverageRating(ratings), status, words_freq});
-        document_ids_.push_back(document_id);
+        document_ids_.insert(document_id);
     }
 
 vector<Document> SearchServer::FindTopDocuments(const std::string& raw_query, DocumentStatus status) const {
@@ -41,11 +41,11 @@ vector<Document> SearchServer::FindTopDocuments(const std::string& raw_query, Do
         return documents_.size();
     }
 
-    std::vector<int>::iterator SearchServer::begin() {
+    std::set<int>::iterator SearchServer::begin() {
         return document_ids_.begin();
     }
 
-    std::vector<int>::iterator SearchServer::end() {
+    std::set<int>::iterator SearchServer::end() {
         return document_ids_.end();
     }
 
@@ -74,6 +74,9 @@ vector<Document> SearchServer::FindTopDocuments(const std::string& raw_query, Do
         // O(W)
         for (const auto& [word, freq] : doc_data.words_freq) {
             word_to_document_freqs_[word].erase(document_id);
+            if (word_to_document_freqs_[word].empty()) {
+                word_to_document_freqs_.erase(word);
+            }
         }
 
         // O(N)
