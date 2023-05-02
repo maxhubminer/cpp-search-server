@@ -19,6 +19,7 @@
 #include <type_traits>
 
 const int MAX_RESULT_DOCUMENT_COUNT = 5;
+const float TOLERANCE = 1e-6;
 
 class SearchServer {
 public:
@@ -212,7 +213,7 @@ std::vector<Document> SearchServer::FindTopDocuments(const ExecutionPolicy& poli
 
 	std::sort(policy, matched_documents.begin(), matched_documents.end(),
 		[](const Document& lhs, const Document& rhs) {
-			if (std::abs(lhs.relevance - rhs.relevance) < 1e-6) {
+			if (std::abs(lhs.relevance - rhs.relevance) < TOLERANCE) {
 				return lhs.rating > rhs.rating;
 			}
 			else {
